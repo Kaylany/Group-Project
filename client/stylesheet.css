@@ -1,0 +1,81 @@
+
+main {
+    width: 50%;
+    margin: 50px auto;
+    text-align: center;
+    color: white;
+}
+
+/* Navigation Bar */
+
+.navbar {
+    padding: 0 0 4.5rem;
+}
+
+.navbar-brand {
+    font-family: "Ubuntu";
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.nav-item {
+    padding: 0 18px;
+}
+
+.nav-link {
+    font-size: 1.2rem;
+}
+
+.header-title {
+    color: hsl(200, 100%, 80%);
+    text-decoration: none;
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.header-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5rem;
+}
+
+.header-nav ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.header-nav li {
+    list-style: none;
+}
+
+.header-nav li a {
+    text-decoration: none;
+    color: hsl(200, 100%, 80%);
+    font-weight: 300;
+    padding: 1rem;
+}
+
+.header-nav li a:hover, .header-title:hover {
+    color: white;
+}
+
+body {
+    background: linear-gradient(to right, hsl(200, 100%, 8%), hsl(200, 100%, 16%));
+}
+
+table {
+    margin: 50px auto;
+}
+
+table, th, td {
+    border-collapse: collapse;
+    border: 1px solid white;
+}
+
+th, td {
+    padding: 5px;
+}
+
