@@ -4,35 +4,38 @@
 /*change 'author' to 'writer' 
 	address and city are varchar(50)
 	most fields at DECIMAL(12,2) and below
+	character -> characters
+	show -> shows
 	*/
 
-DROP TABLE IF EXISTS actor;
-DROP TABLE IF EXISTS role;
-DROP TABLE IF EXISTS actor_phone;
-DROP TABLE IF EXISTS showCategory;
-DROP TABLE IF EXISTS character;
-DROP TABLE IF EXISTS showProduction;
-DROP TABLE IF EXISTS showStaff;
+DROP TABLE IF EXISTS donation;
+DROP TABLE IF EXISTS ticketSales;
+DROP TABLE IF EXISTS theaterRevenue;
+DROP TABLE IF EXISTS revenueReport;
+DROP TABLE IF EXISTS donor;
+DROP TABLE IF EXISTS boxOfficeReceipt;
+DROP TABLE IF EXISTS actorTravel;
+DROP TABLE IF EXISTS travelExpense;
+DROP TABLE IF EXISTS fixedProduction;
+DROP TABLE IF EXISTS actorProduction;
+DROP TABLE IF EXISTS operatingExpense;
 DROP TABLE IF EXISTS productionExpense;
 DROP TABLE IF EXISTS weeklyExpense;
-DROP TABLE IF EXISTS actorProduction;
-DROP TABLE IF EXISTS fixedProduction;
-DROP TABLE IF EXISTS showVersion;
-DROP TABLE IF EXISTS milestones;
-DROP TABLE IF EXISTS productionMilestones;
-DROP TABLE IF EXISTS show;
-DROP TABLE IF EXISTS operatingExpense;
 DROP TABLE IF EXISTS operatingCategory;
 DROP TABLE IF EXISTS itemCategory;
+DROP TABLE IF EXISTS productionMilestones;
+DROP TABLE IF EXISTS showProduction;
 DROP TABLE IF EXISTS theater;
-DROP TABLE IF EXISTS actorTravel;
-DROP TABLE IF EXISTS boxOfficeReceipt;
-DROP TABLE IF EXISTS travelExpense;
-DROP TABLE IF EXISTS ticketSales;
-DROP TABLE IF EXISTS revenueReport;
-DROP TABLE IF EXISTS theaterRevenue;
-DROP TABLE IF EXISTS donation;
-DROP TABLE IF EXISTS donor;
+DROP TABLE IF EXISTS milestone;
+DROP TABLE IF EXISTS showVersion;
+DROP TABLE IF EXISTS characters;
+DROP TABLE IF EXISTS shows;
+DROP TABLE IF EXISTS showStaff;
+DROP TABLE IF EXISTS showCategory;
+DROP TABLE IF EXISTS role;
+DROP TABLE IF EXISTS actor_phone;
+DROP TABLE IF EXISTS actor;
+
 
 
 
@@ -48,7 +51,7 @@ CREATE TABLE actor(
 		PRIMARY KEY (actorID),
 	CONSTRAINT ssn_unique
 		UNIQUE (ssn)
-):
+);
 
 CREATE TABLE actor_phone(
 	actorID int NOT NULL,
@@ -82,12 +85,12 @@ CREATE TABLE showStaff (
 		PRIMARY KEY (staffID)
 );
 
-CREATE TABLE show (
+CREATE TABLE shows (
 	showID int NOT NULL,
 	categoryID int NOT NULL,
 	producer int NOT NULL,
 	director int NOT NULL,
-	author int NOT NULL,
+	writer int NOT NULL,
 	title varchar(40),
 	budgetSet DECIMAL(12,2),
 	budgetActor DECIMAL(12,2),
@@ -109,7 +112,7 @@ CREATE TABLE show (
 			REFERENCES showStaff(staffID)
 );
 
-CREATE TABLE character (
+CREATE TABLE characters (
 	roleID int NOT NULL,
 	showID int NOT NULL,
 	actor int,
@@ -122,12 +125,12 @@ CREATE TABLE character (
 			REFERENCES role (roleID),
 	CONSTRAINT characters_showID_fk
 		FOREIGN KEY (showID)
-			REFERENCES show (showID),
+			REFERENCES shows (showID),
 	CONSTRAINT actor_fk
 		FOREIGN KEY(actor)
 			REFERENCES actor (actorID),
 	CONSTRAINT backup_fk
-		FOREIGN KEY(backup)
+		FOREIGN KEY (backup)
 			REFERENCES actor (actorID)
 );
 
@@ -139,7 +142,7 @@ CREATE TABLE showVersion (
 		PRIMARY KEY (showVersionID),
 	CONSTRAINT showVersion_showID_fk
 		FOREIGN KEY (showID)
-			REFERENCES show (showID)
+			REFERENCES shows (showID)
 );
 
 CREATE TABLE milestone (
@@ -178,7 +181,7 @@ CREATE TABLE showProduction (
 		PRIMARY KEY (productionID),
 	CONSTRAINT showProduction_showID_fk
 		FOREIGN KEY (showID)
-			REFERENCES show (showID),
+			REFERENCES shows (showID),
 	CONSTRAINT showProduction_theaterID_fk
 		FOREIGN KEY (theaterID)
 			REFERENCES theater (theaterID)
@@ -192,8 +195,8 @@ CREATE TABLE productionMilestones (
 	CONSTRAINT productionMilestones_productionID_fk
 		FOREIGN KEY (productionID)
 			REFERENCES showProduction (productionID),
-	CONSTRAINT productionMilestones_milestonesID_fk
-		FOREIGN KEY (milestonesID)
+	CONSTRAINT productionMilestones_milestoneID_fk
+		FOREIGN KEY (milestoneID)
 			REFERENCES milestone (milestoneID)
 );
 
@@ -205,7 +208,7 @@ CREATE TABLE itemCategory (
 );
 
 CREATE TABLE operatingCategory(
-	operatiingCategoryID int NOT NULL,
+	operatingCategoryID int NOT NULL,
 	category varchar(30),
 	CONSTRAINT operatingCategoryID_pk
 		PRIMARY KEY (operatingCategoryID)
@@ -215,7 +218,7 @@ CREATE TABLE operatingCategory(
 CREATE TABLE weeklyExpense (
 	weeklyExpenseID int NOT NULL,
 	startDate DATE,
-	endDate	DATE,
+	endDate DATE,
 	weeklyTotal DECIMAL(12,2) NOT NULL,
 	CONSTRAINT weeklyexpenseID_pk
 		PRIMARY KEY (weeklyExpenseID)
@@ -245,7 +248,7 @@ CREATE TABLE operatingExpense(
 	weeklyExpenseID int NOT NULL,
 	operatingCategoryID int NOT NULL,
 	amount DECIMAL(12,2),
-	address	varchar(50),
+	address varchar(50),
 	city varchar(50),
 	state char(2),
 	zip char(5),
@@ -271,11 +274,11 @@ CREATE TABLE actorProduction(
 	CONSTRAINT actorProduction_actorID_fk
 		FOREIGN KEY (actorID)
 			REFERENCES actor (actorID),
-	CONSTRAINT actorProduction_weeklyExpenseID
+	CONSTRAINT actorProduction_weeklyExpenseID_fk
 		FOREIGN KEY (weeklyExpenseID)
 			REFERENCES weeklyExpense (weeklyExpenseID),
-	CONSTRAINT catorProduction_roleID)
-		FOREIGN KEY(roleID)
+	CONSTRAINT actorProduction_roleID_fk
+		FOREIGN KEY (roleID)
 			REFERENCES role (roleID)
 );
 
@@ -314,7 +317,7 @@ CREATE TABLE travelExpense(
 		PRIMARY KEY  (travelExpenseID),
 	CONSTRAINT travelExpense_showID_fk
 		FOREIGN KEY (showID)
-			REFERENCES show (showID),
+			REFERENCES shows (showID),
 	CONSTRAINT travelExpense_theaterID_fk
 		FOREIGN KEY (theaterID)
 			REFERENCES theater (theaterID)
@@ -352,7 +355,9 @@ CREATE TABLE boxOfficeReceipt(
 CREATE TABLE donor(
 	donorID int NOT NULL,
 	firstName varchar(30),
-	lastName varchar(30)
+	lastName varchar(30),
+	CONSTRAINT donorID_pk
+		PRIMARY KEY (donorID)
 );
 
 CREATE TABLE revenueReport(
@@ -370,7 +375,7 @@ CREATE TABLE revenueReport(
 		PRIMARY KEY (reportID),
 	CONSTRAINT revenueReport_showID_fk
 		FOREIGN KEY (showID)
-			REFERENCES show (showID),
+			REFERENCES shows (showID),
 	CONSTRAINT revenueReport_producerID_fk
 		FOREIGN KEY (producerID)
 			REFERENCES showStaff (staffID),
@@ -407,10 +412,8 @@ CREATE TABLE ticketSales(
 		PRIMARY KEY (date, showID),
 	CONSTRAINT ticketSales_showID_fk
 		FOREIGN KEY (showID)
-			REFERENCES show (showID)
+			REFERENCES shows (showID)
 );
-
-
 
 CREATE TABLE donation(
 	donationID int NOT NULL,
